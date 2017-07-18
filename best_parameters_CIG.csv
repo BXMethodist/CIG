@@ -1,0 +1,5 @@
+marker,feature,upstream,downstream,height,logP
+h3k27ac,single_width,-8000.0,3000.0,6.0,-22.0624207224
+h3k27ac,single_signal,-8000.0,3000.0,5.0,-21.7615378684
+h3k27ac,total_signal,-8000.0,3000.0,4.0,-22.7331973536
+h3k27ac,total_width,2000.0,12000.0,1.5,-26.2126333559

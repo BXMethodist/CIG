@@ -1,0 +1,19 @@
+1. create a minimizer function
+
+2. do the multiple processing for the search of combination
+
+grid_path_h3k27ac_height.csv                                                                                100%   70KB  70.4KB/s   00:00
+grid_path_h3k27ac_single_signal.csv                                                                         100%   70KB  70.4KB/s   00:00
+grid_path_h3k27ac_single_width.csv                                                                          100%   65KB  65.3KB/s   00:00
+grid_path_h3k27ac_total_signal.csv                                                                          100%   65KB  65.1KB/s   00:00
+grid_path_h3k27ac_total_width.csv                                                                           100%   65KB  65.0KB/s   00:00
+grid_path_h3k27me3_height.csv                                                                               100%   71KB  70.9KB/s   00:00
+grid_path_h3k27me3_single_signal.csv                                                                        100%   71KB  71.0KB/s   00:00
+grid_path_h3k27me3_single_width.csv                                                                         100%   66KB  65.9KB/s   00:00
+grid_path_h3k27me3_total_signal.csv                                                                         100%   71KB  71.0KB/s   00:00
+grid_path_h3k27me3_total_width.csv                                                                          100%   71KB  70.9KB/s   00:00
+grid_path_h3k4me1_height.csv                                                                                100%   62KB  61.7KB/s   00:00
+grid_path_h3k4me1_single_signal.csv                                                                         100%   62KB  61.7KB/s   00:00
+grid_path_h3k4me1_single_width.csv                                                                          100%   62KB  61.7KB/s   00:00
+grid_path_h3k4me1_total_signal.csv                                                                          100%   62KB  61.7KB/s   00:00
+grid_path_h3k4me1_total_width.csv
