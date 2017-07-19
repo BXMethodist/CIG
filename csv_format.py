@@ -28,10 +28,10 @@ def reformat(directory='./csv/'):
         df.to_csv(directory+path, index=None)
 
 def get_best(directory='./csv/'):
-    parameters = {'upstream': range(-250000, 250000, 1000), 'downstream': range(-250000, 250000, 1000), 'height': [0.25,0.5,0.75,1.25,1.5,1.75,2.25,2.5,2.75,3.25,3.5,3.75,4.5,4.25,4.75]+range(1, 201, 1)}
+    parameters = {'upstream': range(-250000, 250000, 1000), 'downstream': range(-250000, 250000, 1000), 'height': range(1,16)}
     # markers = ['h3k4me1', 'h3k4me3', 'h3k27me3', 'h3k27ac']
-    markers = ['h3k27ac']
-    features = ['single_width', 'total_signal', 'total_width', 'single_signal']
+    markers = ['h3k4me1']
+    features = ['kurtosis']
 #['total_width', 'single_width',  'total_signal', 'height', 'kurtosis', 'skewness', 'single_signal',]
     for marker in markers:
         for feature in features:
@@ -80,7 +80,7 @@ def generate_plot(df_path):
 
     plt.savefig(df_path.replace('.csv', '.png'))
 
-# reformat()
+reformat()
 # df1 = pd.read_csv('./csv/1stRound/h3k27ac/grid_path_h3k27ac_single_width.csv')
 # df2 = pd.read_csv('./csv/grid_path_h3k27ac_single_width.csv')
 #
@@ -90,7 +90,7 @@ def generate_plot(df_path):
 
 
 get_best()
-get_best_parameter()
+# get_best_parameter()
 
 # files = ['./csv/1stRound/h3k4me3/' + x for x in os.listdir('./csv/1stRound/h3k4me3/') if x.startswith('h3k4me3') and x.endswith('.csv')]
 #

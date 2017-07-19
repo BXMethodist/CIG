@@ -41,20 +41,22 @@ if __name__ == "__main__":
     # markers = ['h3k4me3']  #, 'h3k27ac', 'h3k27me3', 'h3k4me1']
     # markers = ['h3k4me3']
     # markers = ['h3k27ac']
-    # markers = ['h3k27me3']
-    markers = ['h3k4me1']
+    markers = ['h3k27me3']
+    # markers = ['h3k4me1']
     # criterias = ['total_width', 'single_width', 'height']
     # criterias = ['total_signal', 'single_signal']
     # criterias = ['skewness', 'kurtosis']
     # criterias = ['total_width']
     # criterias = ['single_width']
-    criterias = ['height']
+    # criterias = ['height']
     # criterias = ['total_signal']
     # criterias = ['single_signal']
+    criterias = ['skewness']
+    # criterias = ['kurtosis']
 
     if 'skewness' in criterias or 'kurtosis' in criterias:
         option = True
-        cutoff_range = range(5, 101, 5)
+        cutoff_range = range(5, 105)
     else:
         option = False
         cutoff_range = [0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5]
@@ -68,7 +70,7 @@ if __name__ == "__main__":
         else:
             dfs_path = '/home/tmhbxx3/scratch/CIG/' + marker+ '_peaks/pooled/'
 
-        dfs = os.listdir(dfs_path)
+        dfs = [x for x in os.listdir(dfs_path) if x.endswith('.csv')]
         all_dfs = defaultdict(dict)
         for table_name in dfs:
             info = table_name.split('_')
@@ -78,6 +80,8 @@ if __name__ == "__main__":
                 cell_type = info[0]
             else:
                 cell_type = info[1]
+            # print info
+            # print info[-1]
             cutoff = float(info[-1][:-4])
             # print cell_type, cutoff
             if cutoff in cutoff_range:
@@ -96,13 +100,13 @@ if __name__ == "__main__":
         # print all_dfs
         ## step 3 do the grid and get the best CIG gene stats
         up_stream_distance_range = range(-250000, 250000, 1000)
-        window_size_range = range(-250000, 250000, 1000)
+        window_size_range = range(-250000, 500000, 1000)
         # window_size_range = [10000]
 
         for criteria in criterias:
             grid_path = grid_search(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                           up_stream_distance_range, window_size_range,
-                                          all_dfs, cutoff_range, criteria, process=8)
+                                          all_dfs, cutoff_range, criteria, process=20)
 
             grid_path_df = pd.DataFrame(grid_path)
 

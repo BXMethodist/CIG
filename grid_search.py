@@ -50,10 +50,10 @@ def next_grid(all_range, range_step, cur_step, cur_center, reduction_step, step_
 def grid_search(CIG_gene_df, non_CIG_gene_df,
                 all_gene_GTF,up_stream_distance_range, window_size_range,
                 all_dfs, cutoff_range, criteria,
-                up_stream_distance_grid=50000, window_size_grid=50000, cutoff_grid=1,
-                up_stream_distance_range_step=1000, window_size_range_step=1000, cutoff_range_step=0.5,
+                up_stream_distance_grid=50000, window_size_grid=50000, cutoff_grid=10,
+                up_stream_distance_range_step=1000, window_size_range_step=1000, cutoff_range_step=5,
                 up_stream_distance_step=2, window_size_step=2, cutoff_step=2,
-                up_stream_distance_limit=1000, window_size_limit=1000, cutoff_limit=0.5,
+                up_stream_distance_limit=1000, window_size_limit=1000, cutoff_limit=5,
                 process=8, wigs=None):
 
     ## track the parameters and logP path

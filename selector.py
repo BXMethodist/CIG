@@ -20,8 +20,8 @@ def get_stats(gene_df, df):
         best_single_width = 0
         best_total_signal = 0
         best_single_signal = 0
-        best_skewness = None
-        best_kurtosis = None
+        best_skewness = 0
+        best_kurtosis = 0
         for r in cur_ranges:
             chr_name, start, end = r
             # print chr_name, start, end
@@ -43,8 +43,8 @@ def get_stats(gene_df, df):
                 cur_skewness = cur_df.ix[cur_df['total_signal'].argmax(),'skewness']
                 cur_kurtosis = cur_df.ix[cur_df['total_signal'].argmax(),'kurtosis']
             else:
-                cur_skewness = None
-                cur_kurtosis = None
+                cur_skewness = 0
+                cur_kurtosis = 0
 
             # new indexing solution
             # cur_df = df.get_peaks(chr_name, start, end)
