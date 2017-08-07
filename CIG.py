@@ -114,7 +114,7 @@ if __name__ == "__main__":
         for criteria in criterias:
             grid_path = grid_search(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                           up_stream_distance_range, window_size_range,
-                                          all_dfs, cutoff_range, criteria, process=8, cost=wilcoxon_cost_function)
+                                          all_dfs, cutoff_range, criteria, process=8, cost_function=wilcoxon_cost_function)
 
             grid_path_df = pd.DataFrame(grid_path)
 

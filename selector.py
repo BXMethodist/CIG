@@ -219,7 +219,7 @@ def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance,
     non_CIG_results_df.columns = ['gene', criteria]
     return CIG_results_df, non_CIG_results_df
 
-def CIG_selecter_all(all_gene_GTF, up_stream_distance, widow_size, all_dfs, cutoff, criteria):
+def CIG_selecter_all(CIG_gene_df, all_gene_GTF, up_stream_distance, widow_size, all_dfs, cutoff, criteria):
     """
     get the genes status and return a data frame with two columns, gene name and criteria.
     :param CIG_gene_df:

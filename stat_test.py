@@ -29,9 +29,9 @@ def logP_wilcoxon(groupA, groupB, bags=1):
 
     return np.mean(p_values)
 
-def logP_fisher(gene_df, all_stat_df, category_genes, criteria, top_enrich=500):
+def logP_fisher(gene_df, all_stat_df, criteria, top_enrich=500, ascending=False):
     total_genes = all_stat_df.shape[0]
-    sort_result = all_stat_df.sort([criteria], ascending=False)
+    sort_result = all_stat_df.sort([criteria], ascending)
     top_genes = sort_result['gene'].tolist()[:top_enrich]
     overlap = len(set(top_genes).intersection(set(gene_df['gene'].tolist())))
     not_overlap = top_enrich - overlap

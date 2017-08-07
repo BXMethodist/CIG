@@ -1,5 +1,5 @@
 from selector import CIG_selecter, CIG_selecter_all
-from stat_test import logP_wilcoxon
+from stat_test import logP_wilcoxon, logP_fisher
 
 def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                       cur_up_stream_distance, cur_window_size,
@@ -20,7 +20,9 @@ def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
 def fisher_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                       cur_up_stream_distance, cur_window_size,
                       all_dfs, cur_cutoff, criteria):
-    all_gene_results_df = CIG_selecter_all(all_gene_GTF, cur_up_stream_distance, cur_window_size,
+    all_gene_results_df = CIG_selecter_all(CIG_gene_df, all_gene_GTF, cur_up_stream_distance, cur_window_size,
                                                               all_dfs, cur_cutoff, criteria)
+
+    cur_logP = logP_fisher(CIG_gene_df, all_gene_results_df, criteria, top_enrich=500)
 
     return cur_logP
