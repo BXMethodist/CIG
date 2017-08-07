@@ -1,6 +1,7 @@
 import pandas as pd
 import random
 from ranges import get_range_absolute
+from collections import defaultdict
 
 def df_to_index_danpos(df, bin=3000):
     results = {}
@@ -176,7 +177,8 @@ def random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed):
     negative_control_genes_df.columns = CIG_gene_df.columns
     return negative_control_genes_df
 
-def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance, widow_size, all_dfs, cutoff, criteria):
+def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance, down_stream_distance, all_dfs, cutoff, criteria,
+                 TSS_pos, TTS_pos):
     """
     get the genes status and return a data frame with two columns, gene name and criteria.
     :param CIG_gene_df:
@@ -190,8 +192,12 @@ def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance,
     """
     CIG_gene_list = list(CIG_gene_df['gene'].values)
     non_CIG_gene_list = list(non_CIG_gene_df['gene'].values)
-    CIG_gene_ranges = get_range_absolute(CIG_gene_list, all_gene_GTF, up_stream_distance, widow_size)
-    non_CIG_gene_ranges = get_range_absolute(non_CIG_gene_list, all_gene_GTF, up_stream_distance, widow_size)
+    CIG_gene_ranges = get_range_absolute(CIG_gene_list, all_gene_GTF, up_stream_distance, down_stream_distance,
+                                         TSS_pos,
+                                         TTS_pos)
+    non_CIG_gene_ranges = get_range_absolute(non_CIG_gene_list, all_gene_GTF, up_stream_distance, down_stream_distance,
+                                             TSS_pos,
+                                             TTS_pos)
 
     CIG_results = []
     non_CIG_results = []
@@ -219,7 +225,8 @@ def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance,
     non_CIG_results_df.columns = ['gene', criteria]
     return CIG_results_df, non_CIG_results_df
 
-def CIG_selecter_all(CIG_gene_df, all_gene_GTF, up_stream_distance, widow_size, all_dfs, cutoff, criteria):
+def CIG_selecter_all(CIG_gene_df, all_gene_GTF, up_stream_distance, down_stream_distance, all_dfs, cutoff, criteria,
+                     TSS_pos, TTS_pos):
     """
     get the genes status and return a data frame with two columns, gene name and criteria.
     :param CIG_gene_df:
@@ -231,7 +238,8 @@ def CIG_selecter_all(CIG_gene_df, all_gene_GTF, up_stream_distance, widow_size, 
     :param cutoff:
     :return:
     """
-    all_gene_ranges = get_range_absolute(None, all_gene_GTF, up_stream_distance, widow_size)
+    all_gene_ranges = get_range_absolute(None, all_gene_GTF, up_stream_distance, down_stream_distance,
+                                         TSS_pos, TTS_pos)
 
     all_gene_results = []
 

@@ -4,7 +4,7 @@ Such TSS, mid of TSS and TTS. relative size for gene body
 """
 import pandas as pd
 
-def get_range_absolute(gene_list, all_gene_GTF, left_distance, right_distance, TSS_pos='TSS', TTS_pos='TSS'):
+def get_range_absolute(gene_list, all_gene_GTF, left_distance, right_distance, TSS_pos, TTS_pos):
     """
 
     :param all_gene_GTF:
@@ -60,7 +60,7 @@ def get_range_absolute(gene_list, all_gene_GTF, left_distance, right_distance, T
 
     return result_df
 
-def get_range_relative(gene_list, all_gene_GTF, left_relative, right_relative, TSS_pos='TSS', TTS_pos='TSS'):
+def get_range_relative(gene_list, all_gene_GTF, left_relative, right_relative, TSS_pos, TTS_pos):
     """
 
     :param all_gene_GTF:

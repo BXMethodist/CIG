@@ -23,7 +23,7 @@ def logP_wilcoxon(groupA, groupB, bags=1):
             # if np.log10(p) < -80:
             #     p_values.append(0)
 
-            p_values.append(np.log10(p[1]))
+            p_values.append(np.log10(p))
         except:
             p_values.append(0)
 
@@ -31,12 +31,14 @@ def logP_wilcoxon(groupA, groupB, bags=1):
 
 def logP_fisher(gene_df, all_stat_df, criteria, top_enrich=500, ascending=False):
     total_genes = all_stat_df.shape[0]
-    sort_result = all_stat_df.sort([criteria], ascending)
+    sort_result = all_stat_df.sort_values(by=[criteria], ascending=ascending)
     top_genes = sort_result['gene'].tolist()[:top_enrich]
     overlap = len(set(top_genes).intersection(set(gene_df['gene'].tolist())))
     not_overlap = top_enrich - overlap
     p = stats.fisher_exact([[overlap, top_enrich], [not_overlap, total_genes]])
     return -np.log10(p)
+
+
 
 
 

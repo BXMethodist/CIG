@@ -64,7 +64,7 @@ if __name__ == "__main__":
         cutoff_range = range(1,16)
     else:
         option = False
-        cutoff_range = range(1, 101)
+        cutoff_range = range(5, 20, 5)
 
     for marker in markers:
         # dfs_path = '/home/tmhbxx3/scratch/CIG/'+marker+'_peaks/pooled/'
@@ -107,18 +107,19 @@ if __name__ == "__main__":
 
         # print all_dfs
         ## step 3 do the grid and get the best CIG gene stats
-        up_stream_distance_range = range(-250000, 250000, 1000)
-        window_size_range = range(-250000, 250000, 1000)
+        up_stream_distance_range = range(-10000, 10000, 1000)
+        window_size_range = range(-10000, 10000, 1000)
         # window_size_range = [10000]
 
         for criteria in criterias:
             grid_path = grid_search(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                                          up_stream_distance_range, window_size_range,
-                                          all_dfs, cutoff_range, criteria, process=8, cost_function=wilcoxon_cost_function)
+                                    up_stream_distance_range, window_size_range,
+                                    all_dfs, cutoff_range, criteria, process=8, cost_function=fisher_cost_function,
+                                    TSS_pos='TSS', TTS_pos='TSS')
 
             grid_path_df = pd.DataFrame(grid_path)
 
-            grid_path_df.to_csv('grid_path_' + marker + '_' + criteria + '_GSM1541011.csv')
+            grid_path_df.to_csv('grid_path_' + marker + '_' + criteria + '_GSM1541011_fisher.csv')
 
             # grid_path_results = []
             #

@@ -2,11 +2,13 @@ from selector import CIG_selecter, CIG_selecter_all
 from stat_test import logP_wilcoxon, logP_fisher
 
 def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                      cur_up_stream_distance, cur_window_size,
-                      all_dfs, cur_cutoff, criteria):
+                          cur_up_stream_distance, cur_down_stream_distance,
+                          all_dfs, cur_cutoff, criteria,
+                          TSS_pos, TTS_pos):
     cur_CIG_results_df, cur_non_CIG_results_df = CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                                                              cur_up_stream_distance, cur_window_size,
-                                                              all_dfs, cur_cutoff, criteria)
+                                                              cur_up_stream_distance, cur_down_stream_distance,
+                                                              all_dfs, cur_cutoff, criteria,
+                                                              TSS_pos, TTS_pos)
 
     # print cur_CIG_results_df.shape, cur_non_CIG_results_df.shape
     if cur_CIG_results_df[criteria].mean() < cur_non_CIG_results_df[criteria].mean():
@@ -18,10 +20,12 @@ def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
     return cur_logP
 
 def fisher_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                      cur_up_stream_distance, cur_window_size,
-                      all_dfs, cur_cutoff, criteria):
-    all_gene_results_df = CIG_selecter_all(CIG_gene_df, all_gene_GTF, cur_up_stream_distance, cur_window_size,
-                                                              all_dfs, cur_cutoff, criteria)
+                         cur_up_stream_distance, cur_down_stream_distance,
+                         all_dfs, cur_cutoff, criteria,
+                         TSS_pos, TTS_pos):
+    all_gene_results_df = CIG_selecter_all(CIG_gene_df, all_gene_GTF, cur_up_stream_distance, cur_down_stream_distance,
+                                           all_dfs, cur_cutoff, criteria,
+                                           TSS_pos, TTS_pos)
 
     cur_logP = logP_fisher(CIG_gene_df, all_gene_results_df, criteria, top_enrich=500)
 

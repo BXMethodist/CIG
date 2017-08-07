@@ -2,17 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c2d27e0-6d91-4407-a9f3-f691521e7cc7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cost.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/csv/1stRound/h3k4me1/grid_path_h3k4me1_kurtosis.csv" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/wilcoxontest.py" afterPath="$PROJECT_DIR$/stat_test.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CIG.py" afterPath="$PROJECT_DIR$/CIG.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CIG_predict.py" afterPath="$PROJECT_DIR$/CIG_predict.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/best_parameters_CIG.csv" afterPath="$PROJECT_DIR$/best_parameters_CIG.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/csv_format.py" afterPath="$PROJECT_DIR$/csv_format.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cost.py" afterPath="$PROJECT_DIR$/cost.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grid_search.py" afterPath="$PROJECT_DIR$/grid_search.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ranges.py" afterPath="$PROJECT_DIR$/ranges.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/selector.py" afterPath="$PROJECT_DIR$/selector.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/stat_test.py" afterPath="$PROJECT_DIR$/stat_test.py" />
     </list>
     <ignored path="CIG.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,11 +28,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CIG.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CIG.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CIG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="116" column="113" selection-start-line="116" selection-start-column="113" selection-end-line="116" selection-end-column="113" />
+            <state relative-caret-position="95">
+              <caret line="107" column="12" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="12" />
               <folding>
                 <element signature="e#64#105#0" expanded="true" />
               </folding>
@@ -47,7 +43,7 @@
       <file leaf-file-name="stat_test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/stat_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
+            <state relative-caret-position="342">
               <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
@@ -59,8 +55,8 @@
       <file leaf-file-name="grid_search.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grid_search.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1912">
-              <caret line="6" column="42" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
+            <state relative-caret-position="300">
+              <caret line="192" column="37" selection-start-line="192" selection-start-column="37" selection-end-line="192" selection-end-column="37" />
               <folding>
                 <element signature="e#52#70#0" expanded="true" />
                 <element signature="e#241#1430#0" expanded="false" />
@@ -72,26 +68,26 @@
       <file leaf-file-name="cost.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cost.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="51" selection-start-line="0" selection-start-column="51" selection-end-line="0" selection-end-column="51" />
-              <folding />
+            <state relative-caret-position="345">
+              <caret line="29" column="65" selection-start-line="29" selection-start-column="65" selection-end-line="29" selection-end-column="65" />
+              <folding>
+                <element signature="e#0#51#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="selector.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="selector.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/selector.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="247" column="0" selection-start-line="247" selection-start-column="0" selection-end-line="247" selection-end-column="0" />
+            <state relative-caret-position="900">
+              <caret line="241" column="57" selection-start-line="241" selection-start-column="41" selection-end-line="241" selection-end-column="57" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-                <element signature="e#115#707#0" expanded="false" />
-                <element signature="e#747#1408#0" expanded="false" />
-                <element signature="e#1499#5142#0" expanded="false" />
-                <element signature="e#5225#6098#0" expanded="false" />
-                <element signature="e#6225#8074#0" expanded="false" />
-                <element signature="e#8175#8985#0" expanded="false" />
+                <element signature="e#151#743#0" expanded="false" />
+                <element signature="e#783#1444#0" expanded="false" />
+                <element signature="e#1535#5178#0" expanded="false" />
+                <element signature="e#5261#6134#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -100,11 +96,10 @@
       <file leaf-file-name="ranges.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ranges.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+            <state relative-caret-position="470">
+              <caret line="62" column="95" selection-start-line="62" selection-start-column="95" selection-end-line="62" selection-end-column="95" />
               <folding>
-                <element signature="e#281#2760#0" expanded="false" />
-                <element signature="e#2876#4727#0" expanded="false" />
+                <element signature="e#2852#4703#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -143,19 +138,19 @@
         <option value="$PROJECT_DIR$/skewness_kurtosis.py" />
         <option value="$PROJECT_DIR$/wilcoxontest.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/ranges.py" />
         <option value="$PROJECT_DIR$/csv_format.py" />
         <option value="$PROJECT_DIR$/cost.py" />
-        <option value="$PROJECT_DIR$/grid_search.py" />
-        <option value="$PROJECT_DIR$/CIG.py" />
-        <option value="$PROJECT_DIR$/stat_test.py" />
         <option value="$PROJECT_DIR$/selector.py" />
+        <option value="$PROJECT_DIR$/ranges.py" />
+        <option value="$PROJECT_DIR$/grid_search.py" />
+        <option value="$PROJECT_DIR$/stat_test.py" />
+        <option value="$PROJECT_DIR$/CIG.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1761" />
-    <option name="y" value="-78" />
+    <option name="x" value="-1495" />
+    <option name="y" value="43" />
     <option name="width" value="1440" />
     <option name="height" value="822" />
   </component>
@@ -481,11 +476,25 @@
       <option name="project" value="LOCAL" />
       <updated>1500502403742</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update functions api">
+      <created>1502120756433</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1502120756433</updated>
+    </task>
+    <task id="LOCAL-00004" summary="update functions api">
+      <created>1502130675438</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1502130675438</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1761" y="-78" width="1440" height="822" extended-state="0" />
+    <frame x="-1495" y="43" width="1440" height="822" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2923611" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -493,18 +502,18 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30942896" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30942896" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -521,7 +530,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update the wilcoxontest with bagging of 20" />
     <MESSAGE value="fix the bugs in kurtosis" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix the bugs in kurtosis" />
+    <MESSAGE value="update functions api" />
+    <option name="LAST_COMMIT_MESSAGE" value="update functions api" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -530,20 +540,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/todo">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1050">
-          <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/stat_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -812,16 +808,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CIG.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="116" column="113" selection-start-line="116" selection-start-column="113" selection-end-line="116" selection-end-column="113" />
-          <folding>
-            <element signature="e#64#105#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CIG.pbs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -830,20 +816,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/stat_test.py">
+    <entry file="file://$PROJECT_DIR$/ranges.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state relative-caret-position="470">
+          <caret line="62" column="95" selection-start-line="62" selection-start-column="95" selection-end-line="62" selection-end-column="95" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#2852#4703#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/best_parameters_CIG.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/csv/1stRound/h3k27ac/grid_path_h3k27ac_height.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/selector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="241" column="57" selection-start-line="241" selection-start-column="41" selection-end-line="241" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#151#743#0" expanded="false" />
+            <element signature="e#783#1444#0" expanded="false" />
+            <element signature="e#1535#5178#0" expanded="false" />
+            <element signature="e#5261#6134#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cost.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="29" column="65" selection-start-line="29" selection-start-column="65" selection-end-line="29" selection-end-column="65" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grid_search.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1912">
-          <caret line="6" column="42" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
+        <state relative-caret-position="300">
+          <caret line="192" column="37" selection-start-line="192" selection-start-column="37" selection-end-line="192" selection-end-column="37" />
           <folding>
             <element signature="e#52#70#0" expanded="true" />
             <element signature="e#241#1430#0" expanded="false" />
@@ -851,37 +877,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cost.py">
+    <entry file="file://$PROJECT_DIR$/stat_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="51" selection-start-line="0" selection-start-column="51" selection-end-line="0" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ranges.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+        <state relative-caret-position="342">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding>
-            <element signature="e#281#2760#0" expanded="false" />
-            <element signature="e#2876#4727#0" expanded="false" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/selector.py">
+    <entry file="file://$PROJECT_DIR$/CIG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="247" column="0" selection-start-line="247" selection-start-column="0" selection-end-line="247" selection-end-column="0" />
+        <state relative-caret-position="95">
+          <caret line="107" column="12" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="12" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <element signature="e#115#707#0" expanded="false" />
-            <element signature="e#747#1408#0" expanded="false" />
-            <element signature="e#1499#5142#0" expanded="false" />
-            <element signature="e#5225#6098#0" expanded="false" />
-            <element signature="e#6225#8074#0" expanded="false" />
-            <element signature="e#8175#8985#0" expanded="false" />
+            <element signature="e#64#105#0" expanded="true" />
           </folding>
         </state>
       </provider>

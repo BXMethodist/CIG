@@ -33,10 +33,11 @@ def next_grid(all_range, range_step, cur_step, cur_center, reduction_step, step_
 def grid_search(CIG_gene_df, non_CIG_gene_df,
                 all_gene_GTF,up_stream_distance_range, window_size_range,
                 all_dfs, cutoff_range, criteria, cost_function,
-                up_stream_distance_grid=50000, window_size_grid=50000, cutoff_grid=10,
-                up_stream_distance_range_step=1000, window_size_range_step=1000, cutoff_range_step=1,
+                TSS_pos, TTS_pos,
+                up_stream_distance_grid=2000, window_size_grid=2000, cutoff_grid=5,
+                up_stream_distance_range_step=1000, window_size_range_step=1000, cutoff_range_step=5,
                 up_stream_distance_step=2, window_size_step=2, cutoff_step=2,
-                up_stream_distance_limit=1000, window_size_limit=1000, cutoff_limit=1,
+                up_stream_distance_limit=1000, window_size_limit=1000, cutoff_limit=5,
                 process=8, wigs=None):
 
     ## track the parameters and logP path
@@ -112,7 +113,7 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
             cur_chunk = chunks[i]
             p = Process(target=CIG_process,
                         args=(queue, cur_chunk, CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                                         all_dfs, criteria, cur_past_path, cost_function))
+                                         all_dfs, criteria, cur_past_path, cost_function, TSS_pos, TTS_pos))
             processes.append(p)
             p.start()
 
@@ -170,19 +171,24 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
 
 
 def CIG_process(queue, combinations, CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                                         all_dfs, criteria, cur_past_path, cost_function):
+                                         all_dfs, criteria, cur_past_path, cost_function, TSS_pos, TTS_pos):
     path = []
     best_log_P = None
     best_comb = None
+
     for comb in combinations:
-        # print comb
+        # print comb[0], comb[1], comb[1] <= comb[0]
+        if TSS_pos == TTS_pos and comb[1] <= comb[0]:
+            print comb
+            continue
+
         cur_up_stream_distance, cur_window_size, cur_cutoff = comb
         if (cur_up_stream_distance, cur_window_size, cur_cutoff) in cur_past_path:
             cur_logP = cur_past_path[(cur_up_stream_distance, cur_window_size, cur_cutoff)]
         else:
             cur_logP = cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                      cur_up_stream_distance, cur_window_size,
-                                     all_dfs, cur_cutoff, criteria)
+                                     all_dfs, cur_cutoff, criteria, TSS_pos, TTS_pos)
         print comb, cur_logP
         path.append((comb, cur_logP))
         if best_log_P is None or best_log_P > cur_logP:
