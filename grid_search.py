@@ -1,27 +1,10 @@
 """
 This module will implement the grid_search
 """
-from selector import CIG_selecter
-from wilcoxontest import logP_wilcoxon
+
 import numpy as np
 from copy import deepcopy
 from multiprocessing import Process, Queue
-
-def CIG_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                      cur_up_stream_distance, cur_window_size,
-                      all_dfs, cur_cutoff, criteria):
-    cur_CIG_results_df, cur_non_CIG_results_df = CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                                                              cur_up_stream_distance, cur_window_size,
-                                                              all_dfs, cur_cutoff)
-
-    # print cur_CIG_results_df.shape, cur_non_CIG_results_df.shape
-    if cur_CIG_results_df[criteria].mean() < cur_non_CIG_results_df[criteria].mean():
-        cur_logP = logP_wilcoxon(cur_CIG_results_df[criteria],
-                                 cur_non_CIG_results_df[criteria])
-    else:
-        cur_logP = logP_wilcoxon(cur_non_CIG_results_df[criteria],
-                                 cur_CIG_results_df[criteria])
-    return cur_logP
 
 def next_grid(all_range, range_step, cur_step, cur_center, reduction_step, step_limit, search):
     new_step = cur_step/reduction_step
@@ -49,11 +32,11 @@ def next_grid(all_range, range_step, cur_step, cur_center, reduction_step, step_
 
 def grid_search(CIG_gene_df, non_CIG_gene_df,
                 all_gene_GTF,up_stream_distance_range, window_size_range,
-                all_dfs, cutoff_range, criteria,
+                all_dfs, cutoff_range, criteria, cost_function,
                 up_stream_distance_grid=50000, window_size_grid=50000, cutoff_grid=10,
-                up_stream_distance_range_step=1000, window_size_range_step=1000, cutoff_range_step=5,
+                up_stream_distance_range_step=1000, window_size_range_step=1000, cutoff_range_step=1,
                 up_stream_distance_step=2, window_size_step=2, cutoff_step=2,
-                up_stream_distance_limit=1000, window_size_limit=1000, cutoff_limit=5,
+                up_stream_distance_limit=1000, window_size_limit=1000, cutoff_limit=1,
                 process=8, wigs=None):
 
     ## track the parameters and logP path
@@ -92,12 +75,6 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
         #     break
 
         combinations = np.stack(np.meshgrid(grid_up_stream_distance_range, grid_window_size_range, grid_cutoff_range), -1).reshape(-1, 3)
-
-        # combinations = np.stack(np.meshgrid([344000, 282000, 220000, 158000, 96000, 34000, -28000, -90000], [32000, 94000, 156000, 218000, 280000, 342000], [10, 20, 30, 40, 50, 60, 70]), -1).reshape(-1, 3)
-
-        # combinations = np.stack(np.meshgrid([4000], range(1000, 100000), [12]),
-        #                         -1).reshape(-1, 3)
-
         print combinations.shape, 'current grid size is '
         # print combinations
 
@@ -135,7 +112,7 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
             cur_chunk = chunks[i]
             p = Process(target=CIG_process,
                         args=(queue, cur_chunk, CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                                         all_dfs, criteria, cur_past_path))
+                                         all_dfs, criteria, cur_past_path, cost_function))
             processes.append(p)
             p.start()
 
@@ -193,7 +170,7 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
 
 
 def CIG_process(queue, combinations, CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                                         all_dfs, criteria, cur_past_path):
+                                         all_dfs, criteria, cur_past_path, cost_function):
     path = []
     best_log_P = None
     best_comb = None
@@ -203,7 +180,7 @@ def CIG_process(queue, combinations, CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
         if (cur_up_stream_distance, cur_window_size, cur_cutoff) in cur_past_path:
             cur_logP = cur_past_path[(cur_up_stream_distance, cur_window_size, cur_cutoff)]
         else:
-            cur_logP = CIG_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
+            cur_logP = cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                      cur_up_stream_distance, cur_window_size,
                                      all_dfs, cur_cutoff, criteria)
         print comb, cur_logP

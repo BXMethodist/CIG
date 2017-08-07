@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.optimize as spo
-from wilcoxontest import logP_wilcoxon
+from stat_test import logP_wilcoxon
 from selector import CIG_selecter
 
 def optimize_allocs(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, all_dfs, criteria):

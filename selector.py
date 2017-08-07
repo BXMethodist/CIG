@@ -1,81 +1,155 @@
-import pandas as pd, numpy as np
+import pandas as pd
 import random
 from ranges import get_range_absolute
 
-def get_stats(gene_df, df):
+def df_to_index_danpos(df, bin=3000):
+    results = {}
+    f = open(df, 'r')
+
+    for line in f.readlines()[1:]:
+        line = line.split()
+        t = (line[0],
+             int(line[1]),
+             int(line[2]),
+             int(line[4]),
+             float(line[5]),
+             float(line[6]),
+             )
+
+        if t[0] not in results:
+            results[t[0]] = {}
+
+        for i in range(t[1]/bin, t[2]/bin+1):
+            if i in results[t[0]]:
+                results[t[0]][i].add(t)
+            else:
+                results[t[0]][i] = set()
+                results[t[0]][i].add(t)
+    f.close()
+    return results
+
+def df_to_index_sk(df, bin=3000):
+    results = {}
+    f = open(df, 'r')
+
+    for line in f.readlines()[1:]:
+        line = line.strip().split(',')
+        t = (line[0],
+             int(line[1]),
+             int(line[2]),
+             int(line[4]),
+             float(line[5]),
+             float(line[6]),
+             float(line[8]),
+             float(line[9]),
+             )
+
+        if t[0] not in results:
+            results[t[0]] = {}
+
+        for i in range(t[1]/bin, t[2]/bin+1):
+            if i in results[t[0]]:
+                results[t[0]][i].add(t)
+            else:
+                results[t[0]][i] = set()
+                results[t[0]][i].add(t)
+    f.close()
+    return results
+
+def get_stats(gene_df, df_path, criteria, bin=3000, df_function=df_to_index_danpos):
     """
     This function will select the target gene's peaks stats from the dataframe
     :param gene_df: gene:range dictionary, get the best result for each gene from transcripts range
     :param df: dataframe contain peaks from certain cutoff
     :return:
     """
-    results = []
+    if criteria != 'skewness' and criteria != 'kurtosis':
+        table_dict = df_function(df_path)
+    else:
+        df_function = df_to_index_sk
+        table_dict = df_function(df_path)
 
-    for gene in gene_df['gene'].unique():
-        cur_ranges = gene_df[gene_df['gene'] == gene]['range']
+    results = defaultdict(float)
+
+    for k in range(gene_df.shape[0]):
+
+        # print cur_ranges
         # if gene == 'GFI1':
         #     print gene, cur_ranges
-        best_total_width = 0
-        best_height = 0
-        best_single_width = 0
-        best_total_signal = 0
-        best_single_signal = 0
-        best_skewness = 0
-        best_kurtosis = 0
-        for r in cur_ranges:
-            chr_name, start, end = r
-            # print chr_name, start, end
-            ## Here is the problem, danpos selector will consider the entire overlapped peaks
-            ## The other approach is using self designed peak calling, to make sure each parameter will return different value
+        gene_name = gene_df.iloc[k, 0]
 
-            # old slow solution
-            cur_df = df[(df['chr']==chr_name) &
-                        ((df['start'].between(start, end)) |
-                         (df['end'].between(start, end)))]
-            cur_total_width = cur_df['width_above_cutoff'].sum()
-            cur_height = cur_df['height'].max()
-            cur_single_width = cur_df['width_above_cutoff'].max()
-            cur_total_signal = cur_df['total_signal'].sum()
-            cur_single_signal = cur_df['total_signal'].max()
+        chr_name, start, end = gene_df.iloc[k, 1], gene_df.iloc[k, 2], gene_df.iloc[k, 3]
+        ## Here is the problem, danpos selector will consider the entire overlapped peaks
+        ## The other approach is using self designed peak calling, to make sure each parameter will return different value
+        cur_table = set()
 
-            # This is for kurtosis and skewness
-            if cur_df.shape[0] > 0 and 'skewness' in cur_df.columns and 'kurtosis' in cur_df.columns:
-                cur_skewness = cur_df.ix[cur_df['total_signal'].argmax(),'skewness']
-                cur_kurtosis = cur_df.ix[cur_df['total_signal'].argmax(),'kurtosis']
-            else:
-                cur_skewness = 0
-                cur_kurtosis = 0
+        for i in range(start/bin, end/bin + 1):
+            if chr_name in table_dict and i in table_dict[chr_name]:
+                table = table_dict[chr_name][i]
+                cur_table = cur_table.union(table)
 
-            # new indexing solution
-            # cur_df = df.get_peaks(chr_name, start, end)
-            # cur_total_width = np.sum([p.width for p in cur_df])
-            # cur_height = np.max([p.height for p in cur_df])
-            # cur_single_width = np.max([p.width for p in cur_df])
-            # cur_total_signal = np.sum([p.total_signal for p in cur_df])
-            # cur_single_signal = np.max([p.total_signal for p in cur_df])
+        if len(cur_table) == 0:
+            continue
 
-            # print cur_total_width, cur_total_signal, cur_height
+        selected_table = []
+        for t in cur_table:
+            if start <= t[1] <= end:
+                selected_table.append(t)
+            elif start <= t[2] <= end:
+                selected_table.append(t)
+            elif t[1] < start and end < t[2]:
+                selected_table.append(t)
 
-            if cur_total_width > best_total_width:
-                best_total_width = cur_total_width
-            if cur_height > best_height:
-                best_height = cur_height
-            if cur_single_width > best_single_width:
-                best_single_width = cur_single_width
-            if cur_total_signal > best_total_signal:
-                best_total_signal = cur_total_signal
-            if cur_single_signal > best_single_signal:
-                best_single_signal = cur_single_signal
+        if len(selected_table) == 0:
+            continue
 
-            # this is for kurtosis and skewness
-            if cur_skewness is not None and (best_skewness is None or abs(cur_skewness) > abs(best_skewness)):
-                best_skewness = cur_skewness
-            if cur_kurtosis is not None and (best_kurtosis is None or abs(cur_kurtosis) > abs(best_kurtosis)):
-                best_kurtosis = cur_kurtosis
-        results.append((gene, best_total_width, best_height, best_single_width,
-                        best_total_signal, best_single_signal,
-                        best_skewness, best_kurtosis))
-    return results
+        cur_df = pd.DataFrame(list(selected_table))
+
+        if cur_df.shape[1] == 6:
+            cur_df.columns = ['chr',
+                          'start',
+                          'end',
+                          'width_above_cutoff',
+                          'total_signal',
+                          'height',]
+        else:
+            cur_df.columns = ['chr',
+                              'start',
+                              'end',
+                              'width_above_cutoff',
+                              'total_signal',
+                              'height',
+                              'skewness',
+                              'kurtosis']
+
+        if criteria == 'total_width':
+            cur_value = cur_df['width_above_cutoff'].sum()
+        elif criteria == 'height':
+            cur_value = cur_df['height'].max()
+        elif criteria == 'single_width':
+            cur_value = cur_df['width_above_cutoff'].max()
+        elif criteria == 'total_signal':
+            cur_value = cur_df['total_signal'].sum()
+        elif criteria == 'single_signal':
+            cur_value = cur_df['total_signal'].max()
+        #
+        # # This is for kurtosis and skewness
+        elif cur_df.shape[0] > 0 and criteria == 'skewness' and 'skewness' in cur_df.columns:
+            cur_value = cur_df.ix[cur_df['total_signal'].argmax(),'skewness']
+        elif cur_df.shape[0] > 0 and criteria == 'kurtosis' and 'kurtosis' in cur_df.columns:
+            cur_value = cur_df.ix[cur_df['total_signal'].argmax(), 'kurtosis']
+
+        if cur_value > results[gene_name] and criteria != 'skewness' and criteria != 'kurtosis':
+            results[gene_name] = cur_value
+        # this is for kurtosis and skewness
+        elif criteria == 'skewness' or criteria == 'kurtosis':
+            if abs(cur_value) > abs(results[gene_name]):
+                results[gene_name] = cur_value
+
+    final = []
+    for gene_name in gene_df['gene'].unique():
+        final.append((gene_name, results[gene_name]))
+    return final
 
 def random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed):
     """
@@ -102,10 +176,9 @@ def random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed):
     negative_control_genes_df.columns = CIG_gene_df.columns
     return negative_control_genes_df
 
-
-def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance, widow_size, all_dfs, cutoff):
+def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance, widow_size, all_dfs, cutoff, criteria):
     """
-
+    get the genes status and return a data frame with two columns, gene name and criteria.
     :param CIG_gene_df:
     :param non_CIG_gene_df:
     :param all_gene_GTF:
@@ -133,71 +206,42 @@ def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance,
         # print cell_type, cutoff
         # print all_dfs[cell_type].keys()
         cur_df = all_dfs[cell_type][cutoff]
-        cur_CIG_result = get_stats(cur_CIG_gene_range, cur_df)
-        cur_non_CIG_result = get_stats(cur_non_CIG_gene_range, cur_df)
+        # print cur_CIG_gene_range
+        cur_CIG_result = get_stats(cur_CIG_gene_range, cur_df, criteria)
+        cur_non_CIG_result = get_stats(cur_non_CIG_gene_range, cur_df, criteria)
 
         CIG_results += cur_CIG_result
         non_CIG_results += cur_non_CIG_result
     CIG_results_df = pd.DataFrame(CIG_results)
     # print CIG_results_df
-    CIG_results_df.columns = ['gene', 'total_width', 'height', 'single_width', 'total_signal', 'single_signal', 'skewness', 'kurtosis']
+    CIG_results_df.columns = ['gene', criteria]
     non_CIG_results_df = pd.DataFrame(non_CIG_results)
-    non_CIG_results_df.columns = ['gene', 'total_width', 'height', 'single_width', 'total_signal', 'single_signal', 'skewness', 'kurtosis']
+    non_CIG_results_df.columns = ['gene', criteria]
     return CIG_results_df, non_CIG_results_df
 
-if __name__ == "__main__":
-    from collections import defaultdict
-    import os
+def CIG_selecter_all(all_gene_GTF, up_stream_distance, widow_size, all_dfs, cutoff, criteria):
+    """
+    get the genes status and return a data frame with two columns, gene name and criteria.
+    :param CIG_gene_df:
+    :param non_CIG_gene_df:
+    :param all_gene_GTF:
+    :param up_stream_distance:
+    :param widow_size:
+    :param all_dfs: dictionary of dictionary, cell type and cutoff
+    :param cutoff:
+    :return:
+    """
+    all_gene_ranges = get_range_absolute(None, all_gene_GTF, up_stream_distance, widow_size)
 
-    ### step 1 get random negative control set
-    all_gene_GTF = pd.read_csv('/archive/tmhkxc48/ref_data/hg19/hg19.ucscgenes.knowngene.xls', sep='\t')
-    all_gene_GTF['hg19.kgXref.geneSymbol'] = all_gene_GTF['hg19.kgXref.geneSymbol'].str.upper()
+    all_gene_results = []
 
-    all_genes = set(all_gene_GTF['hg19.kgXref.geneSymbol'].unique())
+    for cell_type in CIG_gene_df['cell_type'].unique():
+        cur_df = all_dfs[cell_type][cutoff]
+        cur_CIG_result = get_stats(all_gene_ranges, cur_df, criteria)
+        all_gene_results += cur_CIG_result
 
-    exclude_list_file = open('/home/tmhbxx3/scratch/CIG/test/merge_ten_cells_relative_genes.txt', 'r')
-    exclude_list = [x.strip().upper() for x in exclude_list_file]
-    exclude_list_file.close()
-    exclude_list = set(exclude_list)
+    all_gene_results_df = pd.DataFrame(all_gene_results)
 
-    CIG_gene_df = pd.read_csv('CIG_strong_trimmed.csv')
-    CIG_gene_df['gene'] = CIG_gene_df['gene'].str.upper()
+    all_gene_results_df.columns = ['gene', criteria]
 
-    # print CIG_gene_df.shape, 'CIG genes'
-
-    non_CIG_gene_df = random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed=9000)
-
-    # print non_CIG_gene_df.shape, 'non CIG gens'
-
-    ### step 2 get all_dfs
-
-    cutoff_range = [15]
-
-    marker = 'h3k27ac'
-    dfs_path = '/home/tmhbxx3/scratch/CIG/test/'+ marker + '_sk_peaks/'
-    dfs = os.listdir(dfs_path)
-    all_dfs = defaultdict(dict)
-    for table_name in dfs:
-        info = table_name.split('_')
-        cell_type = info[0]
-        cutoff = int(info[-1][:-4])
-        # print cell_type, cutoff
-        if cutoff in cutoff_range:
-            all_dfs[cell_type][cutoff] = pd.read_csv(dfs_path+table_name)
-
-    CIG_gene_list = list(CIG_gene_df['gene'].values)
-    non_CIG_gene_list = list(non_CIG_gene_df['gene'].values)
-
-    print all_dfs.keys()
-
-    df1, df2 = CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                 25000, 25000,
-                 all_dfs, 15)
-
-    from wilcoxontest import logP_wilcoxon
-
-    print logP_wilcoxon(df1['kurtosis'], df2['kurtosis'])
-
-
-
-# python /archive/tmhkxc48/tools/danpos2.2.3/danpos.py selector /home/tmhbxx3/scratch/CIG/h3k4me3_peaks/pooled/h3k4me3_CD34_h3k4me3_sample_ENCFF357RXZ_ENCFF102IJI_input_ENCFF084HEK_ENCFF088FNX_ENCFF599JOR_sample.bgsub.Fnor.peaks_10.xls --gene_file /home/tmhbxx3/scratch/CIG/test/all_gene_GTF.xls --gene_out ./test_danpos_selector.txt --genicSelector TSS:-3000:3000
+    return all_gene_results_df
