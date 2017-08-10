@@ -35,10 +35,18 @@ def logP_fisher(gene_df, all_stat_df, criteria, top_enrich=500, ascending=False)
     top_genes = sort_result['gene'].tolist()[:top_enrich]
     overlap = len(set(top_genes).intersection(set(gene_df['gene'].tolist())))
     not_overlap = top_enrich - overlap
-    p = stats.fisher_exact([[overlap, top_enrich], [not_overlap, total_genes]])
-    return -np.log10(p)
+    # print overlap, top_enrich, not_overlap, total_genes
+    p = stats.fisher_exact([[overlap, not_overlap], [not_overlap, total_genes - 2 * top_enrich + overlap]],
+                           alternative='greater')[1]
+    return np.log10(p)
 
 
-
-
-
+if __name__ == "__main__":
+    for overlap in range(1,50):
+        total_genes = 17000
+        top_enrich = 500
+        not_overlap = top_enrich - overlap
+        # print overlap, top_enrich, not_overlap, total_genes
+        p = stats.fisher_exact([[overlap, not_overlap], [not_overlap, total_genes - 2 * top_enrich + overlap]],
+                               alternative='greater')[1]
+        print overlap, np.log10(p)

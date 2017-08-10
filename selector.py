@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd, numpy as np
 import random
 from ranges import get_range_absolute
 from collections import defaultdict
@@ -152,6 +152,45 @@ def get_stats(gene_df, df_path, criteria, bin=3000, df_function=df_to_index_danp
         final.append((gene_name, results[gene_name]))
     return final
 
+def call_stats(gene_df, wigs, criteria, cutoff):
+    results = defaultdict(float)
+
+    for k in range(gene_df.shape[0]):
+        gene_name = gene_df.iloc[k, 0]
+        chr_name, start, end = gene_df.iloc[k, 1], gene_df.iloc[k, 2], gene_df.iloc[k, 3]
+        if chr_name in wigs.genome:
+            cur_signals = wigs.genome[chr_name].get_signals(start, end)
+            # criterias = ['total_width']
+            # criterias = ['single_width']
+            # criterias = ['height']
+            # criterias = ['total_signal']
+            # criterias = ['single_signal']
+            # criterias = ['skewness']
+            # criterias = ['kurtosis']
+            if criteria == 'total_width':
+                cur_value = len(np.where(cur_signals > cutoff)[0])
+                if results[gene_name] < cur_value:
+                    results[gene_name] = cur_value
+            elif criteria == 'total_width':
+                pass
+            elif criteria == 'single_width':
+                pass
+            elif criteria == 'height':
+                pass
+            elif criteria == 'total_signal':
+                pass
+            elif criteria == 'single_signal':
+                pass
+
+        else:
+            continue
+
+    final = []
+    for gene_name in gene_df['gene'].unique():
+        final.append((gene_name, results[gene_name]))
+    return final
+
+
 def random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed):
     """
     random select genes for each cell type
@@ -178,7 +217,7 @@ def random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed):
     return negative_control_genes_df
 
 def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance, down_stream_distance, all_dfs, cutoff, criteria,
-                 TSS_pos, TTS_pos):
+                 TSS_pos, TTS_pos, wigs):
     """
     get the genes status and return a data frame with two columns, gene name and criteria.
     :param CIG_gene_df:
@@ -226,7 +265,7 @@ def CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF, up_stream_distance,
     return CIG_results_df, non_CIG_results_df
 
 def CIG_selecter_all(CIG_gene_df, all_gene_GTF, up_stream_distance, down_stream_distance, all_dfs, cutoff, criteria,
-                     TSS_pos, TTS_pos):
+                     TSS_pos, TTS_pos, wigs):
     """
     get the genes status and return a data frame with two columns, gene name and criteria.
     :param CIG_gene_df:
@@ -246,6 +285,7 @@ def CIG_selecter_all(CIG_gene_df, all_gene_GTF, up_stream_distance, down_stream_
     for cell_type in CIG_gene_df['cell_type'].unique():
         cur_df = all_dfs[cell_type][cutoff]
         cur_CIG_result = get_stats(all_gene_ranges, cur_df, criteria)
+        # cur_CIG_result = call_stats(all_gene_ranges, wigs, criteria, cutoff)
         all_gene_results += cur_CIG_result
 
     all_gene_results_df = pd.DataFrame(all_gene_results)

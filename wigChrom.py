@@ -36,9 +36,9 @@ class WigChrom:
         if start < 0:
             print "start position need to be bigger than 0"
             return
-        if end > self.size:
-            print "end position need to be smaller than genome size"
-            return
+        # if end > self.size:
+        #     print "end position need to be smaller than genome size"
+        #     return
         if end%self.step == 0:
             start = start/self.step
             end = end/self.step

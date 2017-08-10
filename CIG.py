@@ -7,6 +7,7 @@ from grid_search import grid_search
 from table import *
 import pickle
 from cost import wilcoxon_cost_function, fisher_cost_function
+from Wig import Wig
 
 def load_obj(name):
     f = open(name, 'rb')
@@ -27,13 +28,13 @@ if __name__ == "__main__":
     exclude_list = set(exclude_list)
 
     # CIG_gene_df = pd.read_csv('CIG_strong.csv')
-    CIG_gene_df = pd.read_csv('top500.tuson.oncogene_GSM1541011.csv')
+    CIG_gene_df = pd.read_csv('top500.tuson.oncogene_keji.csv')
     CIG_gene_df['gene'] = CIG_gene_df['gene'].str.upper()
 
     # print CIG_gene_df.shape, 'CIG genes'
 
     # non_CIG_gene_df = random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed=9000)
-    non_CIG_gene_df = pd.read_csv('top500.tuson.tumorSuppressor_GSM1541011.csv')
+    non_CIG_gene_df = pd.read_csv('top500.tuson.tumorSuppressor_keji.csv')
     non_CIG_gene_df['gene'] = non_CIG_gene_df['gene'].str.upper()
 
 
@@ -59,12 +60,16 @@ if __name__ == "__main__":
     # criterias = ['skewness']
     # criterias = ['kurtosis']
 
+    # This is specific for fisherexact test
+    wig = Wig('/home/tmhbxx3/archive/h3k27me3/h3k27me3/keji.H3K27me3.bgsub.Fnor.wig')
+
+
     if 'skewness' in criterias or 'kurtosis' in criterias:
         option = True
-        cutoff_range = range(1,16)
+        cutoff_range = range(1, 16)
     else:
         option = False
-        cutoff_range = range(5, 20, 5)
+        cutoff_range = range(1, 21, 2)
 
     for marker in markers:
         # dfs_path = '/home/tmhbxx3/scratch/CIG/'+marker+'_peaks/pooled/'
@@ -107,19 +112,19 @@ if __name__ == "__main__":
 
         # print all_dfs
         ## step 3 do the grid and get the best CIG gene stats
-        up_stream_distance_range = range(-10000, 10000, 1000)
-        window_size_range = range(-10000, 10000, 1000)
+        up_stream_distance_range = range(-50000, 500000, 1000)
+        window_size_range = range(-50000, 500000, 1000)
         # window_size_range = [10000]
 
         for criteria in criterias:
             grid_path = grid_search(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                     up_stream_distance_range, window_size_range,
-                                    all_dfs, cutoff_range, criteria, process=8, cost_function=fisher_cost_function,
-                                    TSS_pos='TSS', TTS_pos='TSS')
+                                    all_dfs, cutoff_range, criteria, process=1, cost_function=fisher_cost_function,
+                                    TSS_pos='TSS', TTS_pos='TSS', wigs=wig)
 
             grid_path_df = pd.DataFrame(grid_path)
 
-            grid_path_df.to_csv('grid_path_' + marker + '_' + criteria + '_GSM1541011_fisher.csv')
+            grid_path_df.to_csv('grid_path_' + marker + '_' + criteria + '_keji_fisher.csv')
 
             # grid_path_results = []
             #
