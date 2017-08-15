@@ -42,11 +42,15 @@ def logP_fisher(gene_df, all_stat_df, criteria, top_enrich=500, ascending=False)
 
 
 if __name__ == "__main__":
-    for overlap in range(1,50):
-        total_genes = 17000
-        top_enrich = 500
-        not_overlap = top_enrich - overlap
-        # print overlap, top_enrich, not_overlap, total_genes
-        p = stats.fisher_exact([[overlap, not_overlap], [not_overlap, total_genes - 2 * top_enrich + overlap]],
-                               alternative='greater')[1]
-        print overlap, np.log10(p)
+    cur_groupA = range(450, 10000, 200)
+    cur_groupB = range(1,200)+range(700,20000)
+    print np.mean(cur_groupA)
+    print np.mean(cur_groupB)
+
+    rank_diff, p = stats.mannwhitneyu(cur_groupA, cur_groupB, alternative='less')
+
+    print p
+    #
+    # p = stats.fisher_exact([[1, 4], [3, 12 - 2 * 4 + 1]],
+    #                        alternative='greater')[1]
+    # print p

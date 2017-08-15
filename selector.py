@@ -84,7 +84,12 @@ def get_stats(gene_df, df_path, criteria, bin=3000, df_function=df_to_index_danp
         ## The other approach is using self designed peak calling, to make sure each parameter will return different value
         cur_table = set()
 
-        for i in range(start/bin, end/bin + 1):
+        if end < start:
+            mid = (start + end) / 2
+            start = mid
+            end = mid
+
+        for i in range(int(start/bin), int(end/bin) + 1):
             if chr_name in table_dict and i in table_dict[chr_name]:
                 table = table_dict[chr_name][i]
                 cur_table = cur_table.union(table)
@@ -150,6 +155,7 @@ def get_stats(gene_df, df_path, criteria, bin=3000, df_function=df_to_index_danp
     final = []
     for gene_name in gene_df['gene'].unique():
         final.append((gene_name, results[gene_name]))
+    # print final, len(final)
     return final
 
 def call_stats(gene_df, wigs, criteria, cutoff):
@@ -191,7 +197,7 @@ def call_stats(gene_df, wigs, criteria, cutoff):
     return final
 
 
-def random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed):
+def random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed, number_genes=None):
     """
     random select genes for each cell type
 
@@ -208,10 +214,17 @@ def random_control_genes(CIG_gene_df, exclude_list, all_genes, random_seed):
             candidates.add(gene)
     candidates = list(candidates)
     random.seed(random_seed)
-    negative_control_genes = random.sample(candidates, CIG_gene_df.shape[0])
+
+    if number_genes is None:
+        number_genes = len(candidates)
+
+    negative_control_genes = random.sample(candidates, number_genes)
 
     for i in range(len(negative_control_genes)):
-        results.append([negative_control_genes[i]]+list(CIG_gene_df.iloc[i, 1:]))
+        try:
+            results.append([negative_control_genes[i]]+list(CIG_gene_df.iloc[i, 1:]))
+        except:
+            results.append([negative_control_genes[i]] + list(CIG_gene_df.iloc[0, 1:]))
     negative_control_genes_df = pd.DataFrame(results)
     negative_control_genes_df.columns = CIG_gene_df.columns
     return negative_control_genes_df
@@ -284,8 +297,13 @@ def CIG_selecter_all(CIG_gene_df, all_gene_GTF, up_stream_distance, down_stream_
 
     for cell_type in CIG_gene_df['cell_type'].unique():
         cur_df = all_dfs[cell_type][cutoff]
+
+        # overlap selecter
         cur_CIG_result = get_stats(all_gene_ranges, cur_df, criteria)
+
+        # non overlap selecter
         # cur_CIG_result = call_stats(all_gene_ranges, wigs, criteria, cutoff)
+
         all_gene_results += cur_CIG_result
 
     all_gene_results_df = pd.DataFrame(all_gene_results)
