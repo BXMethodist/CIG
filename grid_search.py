@@ -34,7 +34,7 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
                 all_gene_GTF,up_stream_distance_range, window_size_range,
                 all_dfs, cutoff_range, criteria, cost_function,
                 TSS_pos, TTS_pos,
-                up_stream_distance_grid=50000, window_size_grid=50000, cutoff_grid=4,
+                up_stream_distance_grid=50000, window_size_grid=50000, cutoff_grid=20,
                 up_stream_distance_range_step=1000, window_size_range_step=1000, cutoff_range_step=1,
                 up_stream_distance_step=2, window_size_step=2, cutoff_step=2,
                 up_stream_distance_limit=1000, window_size_limit=1000, cutoff_limit=1,
@@ -86,7 +86,7 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
             combinations = np.asarray(new_combinations)
         print combinations.shape, 'current grid size is '
 
-        # combinations = np.asarray([[-3000, 1000000, 2]])
+        # combinations = np.asarray([[2000, 3000, 8]])
 
         # print combinations
         #

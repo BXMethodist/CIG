@@ -97,14 +97,20 @@ def get_stats(gene_df, df_path, criteria, bin=3000, df_function=df_to_index_danp
         if len(cur_table) == 0:
             continue
 
+        # if gene_name == 'A2BP1':
+        #     print cur_table
+
         selected_table = []
         for t in cur_table:
-            if start <= t[1] <= end:
+            if start < t[1] < end:
                 selected_table.append(t)
-            elif start <= t[2] <= end:
+            elif start < t[2] < end:
                 selected_table.append(t)
-            elif t[1] < start and end < t[2]:
+            elif t[1] <= start and end <= t[2]:
                 selected_table.append(t)
+
+        # if gene_name == 'CCL13':
+        #     print selected_table, start, end
 
         if len(selected_table) == 0:
             continue
@@ -129,11 +135,13 @@ def get_stats(gene_df, df_path, criteria, bin=3000, df_function=df_to_index_danp
                               'kurtosis']
 
         if criteria == 'total_width':
-            cur_value = cur_df['width_above_cutoff'].sum()
+            cur_col = cur_df['end'] - cur_df['start']
+            cur_value = cur_col.sum()
         elif criteria == 'height':
             cur_value = cur_df['height'].max()
         elif criteria == 'single_width':
-            cur_value = cur_df['width_above_cutoff'].max()
+            cur_col = cur_df['end'] - cur_df['start']
+            cur_value = cur_col.max()
         elif criteria == 'total_signal':
             cur_value = cur_df['total_signal'].sum()
         elif criteria == 'single_signal':
@@ -148,9 +156,12 @@ def get_stats(gene_df, df_path, criteria, bin=3000, df_function=df_to_index_danp
         if cur_value > results[gene_name] and criteria != 'skewness' and criteria != 'kurtosis':
             results[gene_name] = cur_value
         # this is for kurtosis and skewness
-        elif criteria == 'skewness' or criteria == 'kurtosis':
+        elif criteria == 'kurtosis':
             if abs(cur_value) > abs(results[gene_name]):
                 results[gene_name] = cur_value
+        elif criteria == 'skewness':
+            if abs(cur_value) > results[gene_name]:
+                results[gene_name] = abs(cur_value)
 
     final = []
     for gene_name in gene_df['gene'].unique():
@@ -311,3 +322,35 @@ def CIG_selecter_all(CIG_gene_df, all_gene_GTF, up_stream_distance, down_stream_
     all_gene_results_df.columns = ['gene', criteria]
 
     return all_gene_results_df
+
+if __name__ == "__main__":
+    import os
+    all_gene_GTF = pd.read_csv('hg19.GREATgene2UCSCknownGenes.table.xls', sep='\t')
+    CIG_gene_df = pd.read_csv('top500.tuson.oncogene_keji.csv')
+    dfs_path = '/home/tmhbxx3/archive/h3k27me3/' + 'h3k27me3' + '_regions/pooled/'
+    dfs = [x for x in os.listdir(dfs_path) if x.endswith('.xls')]
+    all_dfs = defaultdict(dict)
+    for table_name in dfs:
+        info = table_name.split('_')
+
+
+        cell_type = info[1]
+        # print info
+        # print info[-1]
+        cutoff = float(info[-1][:-4])
+        # print cell_type, cutoff
+        if cutoff in [10]:
+            # print 'start load table', table_name
+            # all_dfs[cell_type][cutoff] = peak_table(dfs_path+table_name)
+
+            all_dfs[cell_type][cutoff] = dfs_path + table_name
+
+    result = CIG_selecter_all(CIG_gene_df, all_gene_GTF, -5000, 5000, all_dfs, 10, 'total_width',
+                     'TSS', 'TSS', None)
+
+    result.to_csv('bo_selector.tsv', sep='\t', index=False)
+
+
+
+
+# ('chr17', 32688470, 32689280, 590, 12239.2809126, 41.2235371253)

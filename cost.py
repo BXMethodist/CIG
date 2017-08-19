@@ -11,7 +11,8 @@ def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                                               TSS_pos, TTS_pos,
                                                               wigs)
 
-    # print cur_CIG_results_df.shape, cur_non_CIG_results_df.shape
+    # print 'wilcoxon'
+    print cur_CIG_results_df[criteria].median(),  cur_non_CIG_results_df[criteria].median(), 'average'
     if cur_CIG_results_df[criteria].mean() < cur_non_CIG_results_df[criteria].mean():
         cur_logP = logP_wilcoxon(cur_CIG_results_df[criteria],
                                  cur_non_CIG_results_df[criteria])
@@ -27,7 +28,7 @@ def fisher_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
     all_gene_results_df = CIG_selecter_all(CIG_gene_df, all_gene_GTF, cur_up_stream_distance, cur_down_stream_distance,
                                            all_dfs, cur_cutoff, criteria,
                                            TSS_pos, TTS_pos, wigs)
-
+    # print 'fisher'
     cur_logP = logP_fisher(CIG_gene_df, all_gene_results_df, criteria, top_enrich=500)
 
     return cur_logP

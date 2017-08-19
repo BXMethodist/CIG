@@ -28,16 +28,16 @@ def reformat(directory='./csv/'):
         df.to_csv(directory+path, index=None)
 
 def get_best(directory='./csv/'):
-    parameters = {'upstream': range(-250000, 250000, 1000), 'downstream': range(-250000, 250000, 1000), 'height': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0 ,4.5, 5.0] + range(5, 301)}
+    parameters = {'upstream': range(-1000000, 1000000, 1000), 'downstream': range(-1000000, 1000000, 1000), 'height': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0 ,4.5, 5.0] + range(5, 301)}
     # markers = ['h3k4me1', 'h3k4me3', 'h3k27me3', 'h3k27ac']
     markers = ['h3k27me3']
-    features = ['skewness']
+    features = ['total_width']
 #['total_width', 'single_width',  'total_signal', 'height', 'kurtosis', 'skewness', 'single_signal',]
     for marker in markers:
         for feature in features:
             for parameter in parameters.keys():
                 results = []
-                df = pd.read_csv(directory + 'grid_path_'+marker+'_'+feature+'.csv')
+                df = pd.read_csv(directory + 'grid_path_'+marker+'_'+feature+'genebody_fisher_Great_onco.csv')
                 for p in parameters[parameter]:
                     cur_df = df[df[parameter] == p]
                     if cur_df.shape[0] == 0:
@@ -45,7 +45,7 @@ def get_best(directory='./csv/'):
                     results.append((p, cur_df['logP'].min()*-1))
                 df = pd.DataFrame(results)
                 df.columns = [parameter, 'best_logP']
-                df.to_csv(directory+marker+'_'+feature+'_'+parameter+'_grid_change.csv', index=None)
+                df.to_csv(directory+marker+'_'+feature+'_'+parameter+'_grid_change_genebody_fisher.csv', index=None)
 
 def get_best_parameter(directory='./csv/'):
     results = {}
