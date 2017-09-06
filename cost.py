@@ -12,7 +12,7 @@ def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                                               wigs)
 
     # print 'wilcoxon'
-    print cur_CIG_results_df[criteria].median(),  cur_non_CIG_results_df[criteria].median(), 'average'
+    # print cur_CIG_results_df[criteria].median(),  cur_non_CIG_results_df[criteria].median(), 'average'
     if cur_CIG_results_df[criteria].mean() < cur_non_CIG_results_df[criteria].mean():
         cur_logP = logP_wilcoxon(cur_CIG_results_df[criteria],
                                  cur_non_CIG_results_df[criteria])

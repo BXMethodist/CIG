@@ -4,6 +4,7 @@ from ranges import get_range_absolute
 from collections import defaultdict
 
 def df_to_index_danpos(df, bin=3000):
+    # print df
     results = {}
     f = open(df, 'r')
 

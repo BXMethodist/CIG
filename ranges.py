@@ -32,7 +32,7 @@ def get_range_absolute(gene_list, all_gene_GTF, left_distance, right_distance, T
         negative_df['left_range'] = negative_df['hg19.knownGene.txEnd'] - right_distance
         negative_df[negative_df['left_range'] < 0] = 0
 
-    if TSS_pos == 'TSS' and TTS_pos == 'TTS':
+    elif TSS_pos == 'TSS' and TTS_pos == 'TTS':
         positive_df['left_range'] = positive_df['hg19.knownGene.txStart'] + left_distance
         positive_df[positive_df['left_range'] < 0] = 0
         positive_df['right_range'] = positive_df['hg19.knownGene.txEnd'] + right_distance
@@ -41,7 +41,7 @@ def get_range_absolute(gene_list, all_gene_GTF, left_distance, right_distance, T
         negative_df['left_range'] = negative_df['hg19.knownGene.txStart'] - right_distance
         negative_df[negative_df['left_range'] < 0] = 0
 
-    if TSS_pos == 'MID':
+    elif TSS_pos == 'MID':
         positive_df['MID'] = (positive_df['hg19.knownGene.txStart'] + positive_df['hg19.knownGene.txEnd'])/2
         negative_df['MID'] = (negative_df['hg19.knownGene.txStart'] + negative_df['hg19.knownGene.txEnd'])/2
 

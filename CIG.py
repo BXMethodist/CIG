@@ -17,7 +17,9 @@ def load_obj(name):
 
 if __name__ == "__main__":
     ### step 1 get random negative control set
-    all_gene_GTF = pd.read_csv('/archive/tmhkxc48/ref_data/hg19/hg19.ucscgenes.knowngene.xls', sep='\t')
+    # all_gene_GTF = pd.read_csv('/archive/tmhkxc48/ref_data/hg19/hg19.ucscgenes.knowngene.xls', sep='\t')
+
+    all_gene_GTF = pd.read_csv('hg19.GREATgene2UCSCknownGenes.table.xls', sep='\t')
     all_gene_GTF['hg19.kgXref.geneSymbol'] = all_gene_GTF['hg19.kgXref.geneSymbol'].str.upper()
 
     all_genes = set(all_gene_GTF['hg19.kgXref.geneSymbol'].unique())
@@ -27,8 +29,9 @@ if __name__ == "__main__":
     exclude_list_file.close()
     exclude_list = set(exclude_list)
 
-    CIG_gene_df = pd.read_csv('CIG_strong.csv')
+    # CIG_gene_df = pd.read_csv('CIG_strong.csv')
     # CIG_gene_df = pd.read_csv('top500.tuson.oncogene_keji.csv')
+    CIG_gene_df = pd.read_csv('top500.tuson.tumorSuppressor_keji.csv')
     CIG_gene_df['gene'] = CIG_gene_df['gene'].str.upper()
 
     # print CIG_gene_df.shape, 'CIG genes'
@@ -46,20 +49,20 @@ if __name__ == "__main__":
 
     # cutoff_range = [12]
     # markers = ['h3k4me3']  #, 'h3k27ac', 'h3k27me3', 'h3k4me1']
-    markers = ['h3k4me3']
+    # markers = ['h3k4me3']
     # markers = ['h3k27ac']
-    # markers = ['h3k27me3']
+    markers = ['h3k27me3']
     # markers = ['h3k4me1']
     # criterias = ['total_width', 'single_width', 'height', 'total_signal', 'single_signal']
     # criterias = ['total_signal', 'single_signal']
     # criterias = ['skewness', 'kurtosis']
-    # criterias = ['total_width']
+    criterias = ['total_width']
     # criterias = ['single_width']
     # criterias = ['height']
     # criterias = ['total_signal']
     # criterias = ['single_signal']
     # criterias = ['skewness']
-    criterias = ['kurtosis']
+    # criterias = ['kurtosis']
 
     # This is specific for fisherexact test
     # wig = Wig('/home/tmhbxx3/archive/h3k27me3/h3k27me3/keji.H3K27me3.bgsub.Fnor.wig')
@@ -70,7 +73,7 @@ if __name__ == "__main__":
         cutoff_range = range(2, 100, 2)
     else:
         option = False
-        cutoff_range = range(1, 200, 1)
+        cutoff_range = range(1, 50, 1)
         # cutoff_range = [0.5, 1.0, 1.5 ,2.0 , 2.5 , 3.0, 3.5, 4.5, 5.0]
     for marker in markers:
         # dfs_path = '/home/tmhbxx3/scratch/CIG/'+marker+'_peaks/pooled/'
@@ -80,8 +83,8 @@ if __name__ == "__main__":
             dfs_path = '/home/tmhbxx3/scratch/CIG/test/'+ marker + '_sk_peaks/'
             dfs = [x for x in os.listdir(dfs_path) if x.endswith('.csv')]
         else:
-            dfs_path = '/home/tmhbxx3/scratch/CIG/' + marker+ '_peaks/pooled/'
-            # dfs_path = '/home/tmhbxx3/archive/h3k27me3/' + marker + '_regions/pooled/'
+            # dfs_path = '/home/tmhbxx3/scratch/CIG/' + marker+ '_peaks/pooled/'
+            dfs_path = '/home/tmhbxx3/archive/h3k27me3/' + marker + '_regions/pooled/'
             dfs = [x for x in os.listdir(dfs_path) if x.endswith('.xls')]
 
         # print dfs, 'here are all the tables'
@@ -113,19 +116,27 @@ if __name__ == "__main__":
 
         # print all_dfs
         ## step 3 do the grid and get the best CIG gene stats
-        up_stream_distance_range = range(-250000, 250000, 1000)
-        window_size_range = range(-250000, 250000, 1000)
+        up_stream_distance_range = range(-50000, 50000, 1000)
+        window_size_range = range(-50000, 50000, 1000)
         # window_size_range = [10000]
 
         for criteria in criterias:
-            grid_path = grid_search(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
+            if option:
+                grid_path = grid_search(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                     up_stream_distance_range, window_size_range,
                                     all_dfs, cutoff_range, criteria, process=20, cost_function=wilcoxon_cost_function,
-                                    TSS_pos='TSS', TTS_pos='TSS', wigs=wig)
+                                    TSS_pos='TSS', TTS_pos='TSS', wigs=wig, cutoff_grid=10, cutoff_range_step=2,
+                                        cutoff_limit=2)
+            else:
+                grid_path = grid_search(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
+                                        up_stream_distance_range, window_size_range,
+                                        all_dfs, cutoff_range, criteria, process=20,
+                                        cost_function=fisher_cost_function,
+                                        TSS_pos='TSS', TTS_pos='TTS', wigs=wig)
 
             grid_path_df = pd.DataFrame(grid_path)
 
-            grid_path_df.to_csv('grid_path_' + marker + '_' + criteria + '.csv')
+            grid_path_df.to_csv('grid_path_' + marker + '_' + criteria + 'sup_fisher_genebody.csv')
 
             # grid_path_results = []
             #
