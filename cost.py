@@ -3,7 +3,7 @@ from stat_test import logP_wilcoxon, logP_fisher
 
 def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                           cur_up_stream_distance, cur_down_stream_distance,
-                          all_dfs, cur_cutoff, criteria,
+                          all_dfs, cur_cutoff, criteria, marker,
                           TSS_pos, TTS_pos, wigs):
     cur_CIG_results_df, cur_non_CIG_results_df = CIG_selecter(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                                               cur_up_stream_distance, cur_down_stream_distance,
@@ -12,10 +12,18 @@ def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                                               wigs)
 
     # print 'wilcoxon'
-    # print cur_CIG_results_df[criteria].median(),  cur_non_CIG_results_df[criteria].median(), 'average'
-    if cur_CIG_results_df[criteria].mean() < cur_non_CIG_results_df[criteria].mean():
+    print cur_CIG_results_df[criteria].mean(),  cur_non_CIG_results_df[criteria].mean(), 'average'
+
+    if marker == 'h3k27me3' and criteria != 'kurtosis' and criteria != 'skewness':
         cur_logP = logP_wilcoxon(cur_CIG_results_df[criteria],
                                  cur_non_CIG_results_df[criteria])
+    elif criteria == 'kurtosis' or criteria == 'skewness':
+        if cur_CIG_results_df[criteria].mean() < cur_non_CIG_results_df[criteria].mean():
+            cur_logP = logP_wilcoxon(cur_CIG_results_df[criteria],
+                                     cur_non_CIG_results_df[criteria])
+        else:
+            cur_logP = logP_wilcoxon(cur_non_CIG_results_df[criteria],
+                                     cur_CIG_results_df[criteria])
     else:
         cur_logP = logP_wilcoxon(cur_non_CIG_results_df[criteria],
                                  cur_CIG_results_df[criteria])
@@ -23,7 +31,7 @@ def wilcoxon_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
 
 def fisher_cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                          cur_up_stream_distance, cur_down_stream_distance,
-                         all_dfs, cur_cutoff, criteria,
+                         all_dfs, cur_cutoff, criteria, marker,
                          TSS_pos, TTS_pos, wigs):
     all_gene_results_df = CIG_selecter_all(CIG_gene_df, all_gene_GTF, cur_up_stream_distance, cur_down_stream_distance,
                                            all_dfs, cur_cutoff, criteria,

@@ -32,7 +32,7 @@ def next_grid(all_range, range_step, cur_step, cur_center, reduction_step, step_
 
 def grid_search(CIG_gene_df, non_CIG_gene_df,
                 all_gene_GTF,up_stream_distance_range, window_size_range,
-                all_dfs, cutoff_range, criteria, cost_function,
+                all_dfs, cutoff_range, criteria, marker, cost_function,
                 TSS_pos, TTS_pos,
                 up_stream_distance_grid=10000, window_size_grid=10000, cutoff_grid=10,
                 up_stream_distance_range_step=1000, window_size_range_step=1000, cutoff_range_step=1,
@@ -122,7 +122,7 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
             cur_chunk = chunks[i]
             p = Process(target=CIG_process,
                         args=(queue, cur_chunk, CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                              all_dfs, criteria, cur_past_path, cost_function, TSS_pos, TTS_pos,
+                              all_dfs, criteria, cur_past_path, cost_function, marker, TSS_pos, TTS_pos,
                               wigs))
             processes.append(p)
             p.start()
@@ -185,7 +185,7 @@ def grid_search(CIG_gene_df, non_CIG_gene_df,
 
 
 def CIG_process(queue, combinations, CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
-                all_dfs, criteria, cur_past_path, cost_function, TSS_pos, TTS_pos,
+                all_dfs, criteria, cur_past_path, cost_function, marker, TSS_pos, TTS_pos,
                 wigs):
     path = []
     best_log_P = None
@@ -200,7 +200,7 @@ def CIG_process(queue, combinations, CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
         else:
             cur_logP = cost_function(CIG_gene_df, non_CIG_gene_df, all_gene_GTF,
                                      cur_up_stream_distance, cur_window_size,
-                                     all_dfs, cur_cutoff, criteria, TSS_pos, TTS_pos,
+                                     all_dfs, cur_cutoff, criteria, marker, TSS_pos, TTS_pos,
                                      wigs)
         print comb, cur_logP
         path.append((comb, cur_logP))
