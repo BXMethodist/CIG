@@ -100,16 +100,14 @@ class WigChrom:
                           cur_peak_skewness, cur_peak_kutosis])
         return peaks
 
-    def get_sk(self, start, end, cutoff):
+    def get_sk(self, start, end):
         """
-        calculate the skewness and kurtosis
+        calculate the skewness and kurtosis, based on reference peak information
         :param start:
         :param end:
         :return:
         """
         signals = self.get_signals(start, end)
-        candidates = np.where(signals[1, :] >= cutoff)[0]
-        signals = signals[:, candidates]
         skewness_value = peak_skewness(signals)
         kurtosis_value = peak_kurtosis(signals)
         return skewness_value, kurtosis_value

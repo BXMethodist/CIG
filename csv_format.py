@@ -31,16 +31,16 @@ def get_best(directory='./csv/'):
     parameters = {'upstream': range(-1000000, 1000000, 1000), 'downstream': range(-1000000, 1000000, 1000), 'height': [0,0.25, 0.5,0.75, 1.0,0.1,0.2,0.3,0.4,0.6,0.7,0.8,0.9, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0 ,4.5, 5.0] + range(5, 301)}
     # parameters = {'upstream': range(-1000000, 1000000, 1000), 'downstream': range(-1000000, 1000000, 1000),
     #               'height': range(5, 301)}
-    # markers = ['h3k4me1', 'h3k4me3', 'h3k27me3', 'h3k27ac']
+    markers = ['h3k4me1', 'h3k27ac', 'h3k4me3', 'h3k27me3']
     # markers = ['h3k4me1', 'h3k4me3', 'h3k27ac']
-    markers = ['h3k4me3']
-    features = ['total_width']
-#['total_width', 'single_width',  'total_signal', 'height', 'kurtosis', 'skewness', 'single_signal',]
+    # markers = ['h3k27me3']
+    features = ['total_width', 'height', 'total_signal', 'kurtosis', 'skewness']
+#['total_width', 'single_width',  'total_signal', 'kurtosis', 'skewness', 'single_signal',]
     for marker in markers:
         for feature in features:
             for parameter in parameters.keys():
                 results = []
-                df = pd.read_csv(directory + 'grid_path_'+marker+'_'+feature+'onco_input_genebody.csv')
+                df = pd.read_csv(directory + 'grid_path_'+marker+'_'+feature+'.csv')
                 for p in parameters[parameter]:
                     cur_df = df[df[parameter] == p]
                     for other_parameter in parameters.keys():
@@ -52,7 +52,7 @@ def get_best(directory='./csv/'):
                     results.append((p, cur_df['logP'].min()*-1))
                 df = pd.DataFrame(results)
                 df.columns = [parameter, 'best_logP']
-                df.to_csv(directory+marker+'_'+feature+'_'+parameter+'onco_input_genebody.csv', index=None)
+                df.to_csv(directory+marker+'_'+feature+'_'+parameter+'.csv', index=None)
 
 def get_best_parameter(directory='./csv/'):
     results = {}
@@ -61,10 +61,7 @@ def get_best_parameter(directory='./csv/'):
         df = pd.read_csv(directory+path)
         marker = path.split('_')[2]
         info = path[:-4].split('_')
-        if info[-2] == 'single' or info[-2] == 'total':
-            feature = info[-2] + '_' + info[-1]
-        else:
-            feature = info[-1]
+        feature = '_'.join(info[3:])
         best_p = df['logP'].min()
         cur_df = df[df['logP'] == best_p]
         if (marker, feature) in results:
@@ -136,7 +133,8 @@ def generate_plot(df_path, marker, verbose=True):
     else:
         plt.xlabel('Height cutoff', **font)
         # plt.xlim((np.log10(df.index.min()), np.log10(df.index.max())))
-        plt.xlim((0, df.index.max()))
+        # plt.xlim((0, df.index.max()))
+        plt.xlim((0, 100))
     #
     plt.ylabel('-log10 enrich P', **font)
     # print labels
@@ -144,6 +142,7 @@ def generate_plot(df_path, marker, verbose=True):
     plt.ylim(((0, (int(df.max().max())/10+1)*10)))
     plt.xticks(**font)
     plt.yticks(**font)
+    print labels
     if verbose:
         plt.legend(handals, labels, scatterpoints=1, loc=9, fontsize=10, ncol=2)
 
@@ -153,12 +152,12 @@ def generate_plot(df_path, marker, verbose=True):
 def group_plot(marker, ranges, path):
     csvs = [x for x in os.listdir(path) if x.find(marker)!= -1 and not x.startswith('grid') and not x.endswith('.xlsx') and x.endswith('.csv')]
     # print csvs
-    csvs = [x for x in csvs if x.split('_')[3].find(marker)!=-1]
+    csvs = [x for x in csvs if x.split('_')[2].find(marker)!=-1]
     # print csvs, marker
     dfs = [pd.read_csv(path+'/'+ c) for c in csvs]
-    names = [''.join(c.split('_')[2:]).replace('onco', 'oncogene').replace('sup', 'suppressor').replace('inputgenebody', '_genebody').replace('input', "_TSS").replace(marker, '').replace('.csv','').replace('width','') for c in csvs]
-    # names = [c.split('_')[0] for c in csvs]
-    # print names
+    # names = [c.split('_')[0]+'_'+''.join(c.split('_')[2:]).replace('onco', 'oncogene').replace('sup', 'suppressor').replace('inputgenebody', '_genebody').replace('input', "_TSS").replace(marker, '').replace('.csv','').replace('width','') for c in csvs]
+    names = [c.split('_')[0] for c in csvs]
+    print names
     for i in range(len(dfs)):
         dfs[i] = dfs[i].drop_duplicates()
         dfs[i] = dfs[i].set_index([marker])
@@ -186,15 +185,15 @@ def group_plot(marker, ranges, path):
 #
 #
 # get_best()
-get_best_parameter()
+# get_best_parameter()
 #
 #
 # group_plot('height', [0,0.1,0.2,0.3,0.4,0.6,0.7,0.8,0.9,0.25,0.5,0.75]+ range(1,50), './csv/h3k4me3_input_oncogene_tumor/')
-# group_plot('height', range(5,50), './csv/h3k4me3_input_oncogene_tumor/')
-# group_plot('downstream', range(0,50000,1000), './csv/h3k4me3_input_oncogene_tumor/')
-# group_plot('upstream', range(-50000,0, 1000), './csv/h3k4me3_input_oncogene_tumor/')
+# group_plot('height', range(1,50), './csv/mid/height/')
+# group_plot('downstream', range(0,1000000,1000), './csv/mid/height')
+# group_plot('upstream', range(-1000000,0, 1000), './csv/mid/height')
 
 # group_plot('height', [0,0.1,0.2,0.3,0.4,0.6,0.7,0.8,0.9,0.25,0.5,0.75]+ range(1,200), './csv/genebody/single_signal/')
-# group_plot('height', range(1,200), './csv/4th/single_signal/')
-# group_plot('downstream', range(0,250000,1000), './csv/genebody/single_signal/')
-# group_plot('upstream', range(-250000,0, 1000), './csv/genebody/single_signal/')
+group_plot('height', range(1,100), './csv/6th/kurtosis/')
+group_plot('downstream', range(0,500000,1000), './csv/6th/kurtosis/')
+group_plot('upstream', range(-500000,0, 1000), './csv/6th/kurtosis/')
